@@ -13,7 +13,7 @@
 实现代码
 
 Mapper:
-```
+```java
     private ArrayList<FinalBean> finalBeans = new ArrayList<>();
 
     @Override
@@ -62,9 +62,11 @@ Mapper:
             }
         }
     }
-    ```
+```
+
 Driver:
-        ```
+
+```java
         Configuration conf = new Configuration();
         Job job = Job.getInstance(conf);
 
@@ -84,7 +86,8 @@ Driver:
         FileOutputFormat.setOutputPath(job, new Path(args[2]));
 
         System.exit(job.waitForCompletion(true) ? 0 : 1);
-        ```
+```
+
 ##reduce-side
 
 hadoop
@@ -95,7 +98,7 @@ hadoop
 
 Mapper:
 
-```
+```java
 
   public class ReduceJoinMapper extends Mapper<LongWritable, Text, Text, FinalBean> {
 
@@ -142,7 +145,7 @@ Mapper:
 }
 ```
 Reducer:
-
+```java
     @Override
     protected void reduce(Text key, Iterable<FinalBean> finalBeans, Context context) throws IOException, InterruptedException {
         ArrayList<FinalBean> finalBeanArrayList = new ArrayList<>();
@@ -173,8 +176,10 @@ Reducer:
 
     }
 ```
+
 Driver:
-```
+
+```java
   public static void main(String[] args) throws IOException, InterruptedException, ClassNotFoundException {
         Job job = Job.getInstance(new Configuration());
         job.setJarByClass(ReduceJoinDriver.class);
@@ -194,7 +199,8 @@ Driver:
 Spark
 
 代码：
-```
+
+```scala
   def main(args: Array[String]): Unit = {
     val sparkConf = new SparkConf()
       .setMaster("local")
@@ -226,7 +232,9 @@ Spark
     output.foreach(println)
     sc.stop()
   }
- ``` 
+  
+``` 
+
   实现的底层逻辑
 1.   首先用groupwith()方法将两个RDD根据key返回（key，Iterable[], Iterable[]）
 2.  然后两个Iterable数组进行一一对应。
